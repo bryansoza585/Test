@@ -23,16 +23,6 @@ app.get('/webhook', (req, res) => {
     }
 })
 
-// GET /webhook
-app.get('/test', (req, res) => {
-    // Facebook sends a GET request
-    // To verify that the webhook is set up
-    // properly, by sending a special challenge that
-    // we need to echo back if the "verify_token" is as specified
-    console.log('adasdawdasd');
-    return res.status(200).send({ success: true });
-})
-
 // POST /webhook
 app.post('/webhook', async (req, res) => {
     // Facebook will be sending an object called "entry" for "leadgen" webhook event
