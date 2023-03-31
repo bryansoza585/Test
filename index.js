@@ -29,8 +29,8 @@ app.post('/webhook', async (req, res) => {
     if (!req.body.entry) {
         return res.status(500).send({ error: 'Invalid POST data received' });
     }
-    console.log(req.body.entry);
-    
+    console.log('LEAD BODY', JSON.stringify(req.body.entry));
+
     // Travere entries & changes and process lead IDs
     for (const entry of req.body.entry) {
         for (const change of entry.changes) {
