@@ -17,7 +17,7 @@ app.get('/webhook', (req, res) => {
     // To verify that the webhook is set up
     // properly, by sending a special challenge that
     // we need to echo back if the "verify_token" is as specified
-    if (req.query['hub.verify_token'] === process.env.CUSTOM_WEBHOOK_VERIFY_TOKEN) {
+    if (req.query['hub.verify_token'] === 'CUSTOM_WEBHOOK_VERIFY_TOKEN') {
         res.send(req.query['hub.challenge']);
         return;
     }
@@ -29,7 +29,6 @@ app.post('/webhook', async (req, res) => {
     if (!req.body.entry) {
         return res.status(500).send({ error: 'Invalid POST data received' });
     }
-
     console.log(req.body.entry);
     
     // Travere entries & changes and process lead IDs
@@ -40,8 +39,6 @@ app.post('/webhook', async (req, res) => {
             await processNewLead(change.value.leadgen_id);
         }
     }
-
-    
 
     // Success
     res.send({ success: true });
@@ -57,7 +54,7 @@ async function processNewLead(leadId) {
 
     try {
         // Get lead details by lead ID from Facebook API
-        response = await axios.get(`https://graph.facebook.com/v9.0/${leadId}/?access_token=${FACEBOOK_PAGE_ACCESS_TOKEN}`);
+        response = await axios.get(`https://graph.facebook.com/v16.0/${leadId}/?access_token=${FACEBOOK_PAGE_ACCESS_TOKEN}`);
     }
     catch (err) {
         // Log errors
@@ -70,24 +67,24 @@ async function processNewLead(leadId) {
     }
 
     // Lead fields
-    //const leadForm = [];
+    const leadForm = [];
 
     // Extract fields
-    /*for (const field of response.data.field_data) {
+    for (const field of response.data.field_data) {
         // Get field name & value
         const fieldName = field.name;
         const fieldValue = field.values[0];
 
         // Store in lead array
         leadForm.push(`${fieldName}: ${fieldValue}`);
-    }*/
+    }
 
     // Implode into string with newlines in between fields
-    //const leadInfo = leadForm.join('\n');
+    const leadInfo = leadForm.join('\n');
 
     // Log to console
-    console.log('A new lead was received!\n', response.data);
-
+    console.log('A new lead was received!\n', leadInfo);
+    console.log('A new lead was received!\n', JSON.stringify(response.data));
     // Use a library like "nodemailer" to notify you about the new lead
     // 
     // Send plaintext e-mail with nodemailer
