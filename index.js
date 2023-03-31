@@ -17,7 +17,7 @@ app.get('/webhook', (req, res) => {
     // To verify that the webhook is set up
     // properly, by sending a special challenge that
     // we need to echo back if the "verify_token" is as specified
-    if (req.query['hub.verify_token'] === 'CUSTOM_WEBHOOK_VERIFY_TOKEN') {
+    if (req.query['hub.verify_token'] === process.env.CUSTOM_WEBHOOK_VERIFY_TOKEN) {
         res.send(req.query['hub.challenge']);
         return;
     }
@@ -65,23 +65,23 @@ async function processNewLead(leadId) {
     }
 
     // Lead fields
-    const leadForm = [];
+    //const leadForm = [];
 
     // Extract fields
-    for (const field of response.data.field_data) {
+    /*for (const field of response.data.field_data) {
         // Get field name & value
         const fieldName = field.name;
         const fieldValue = field.values[0];
 
         // Store in lead array
         leadForm.push(`${fieldName}: ${fieldValue}`);
-    }
+    }*/
 
     // Implode into string with newlines in between fields
-    const leadInfo = leadForm.join('\n');
+    //const leadInfo = leadForm.join('\n');
 
     // Log to console
-    console.log('A new lead was received!\n', leadInfo);
+    console.log('A new lead was received!\n', response.data);
 
     // Use a library like "nodemailer" to notify you about the new lead
     // 
