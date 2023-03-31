@@ -38,6 +38,8 @@ app.post('/webhook', async (req, res) => {
         }
     }
 
+    console.log(req.body.entry);
+
     // Success
     res.send({ success: true });
 })
