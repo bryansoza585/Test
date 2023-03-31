@@ -30,15 +30,18 @@ app.post('/webhook', async (req, res) => {
         return res.status(500).send({ error: 'Invalid POST data received' });
     }
 
+    console.log(req.body.entry);
+    
     // Travere entries & changes and process lead IDs
     for (const entry of req.body.entry) {
         for (const change of entry.changes) {
             // Process new lead (leadgen_id)
+            
             await processNewLead(change.value.leadgen_id);
         }
     }
 
-    console.log(req.body.entry);
+    
 
     // Success
     res.send({ success: true });
